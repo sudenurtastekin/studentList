@@ -86,4 +86,53 @@ function App() {
 }
 
 
+function StudentRow({ id, ad, soyad, ePosta, dogumTarihi, updateRecord, deleteRecord }) {
+  const [isEditing, setEditing] = useState(false);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formObj = Object.fromEntries(formData);
+    formObj.id = id;
+    updateRecord(formObj);
+    setEditing(false);
+  }
+
+  return (
+    <form onSubmit={handleSubmit} onDoubleClick={() => setEditing(true)}>
+      {isEditing ?
+        <>
+          <div className="studentTableCol">
+            <input type="text" required name='ad' defaultValue={ad} />
+          </div>
+          <div className="studentTableCol">
+            <input type="text" required name='soyad' defaultValue={soyad} />
+          </div>
+          <div className="studentTableCol">
+            <input type="email" required name='ePosta' defaultValue={ePosta} />
+          </div>
+          <div className="studentTableCol">
+            <input type="date" required name='dogumTarihi' defaultValue={dogumTarihi} />
+          </div>
+          <div className="studentTableCol">
+            <button type='button' onClick={() => setEditing(false)}>Vazgeç</button>
+            <button className='saveBtn' type='submit'>Kaydet</button>
+          </div>
+        </>
+        :
+        <>
+          <div className="studentTableCol">{ad}</div>
+          <div className="studentTableCol">{soyad}</div>
+          <div className="studentTableCol">{ePosta}</div>
+          <div className="studentTableCol">{dogumTarihi.split('-').reverse().join('.')}</div>
+          <div className="studentTableCol">
+            <button type='button' onClick={() => setEditing(true)}>Düzenle</button>
+            <button className='delBtn' type='button' onClick={() => deleteRecord(id)}>Sil</button>
+          </div>
+        </>
+      }
+    </form>
+  );
+}
+
 export default App;
